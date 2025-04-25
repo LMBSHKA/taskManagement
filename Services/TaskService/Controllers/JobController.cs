@@ -18,9 +18,9 @@ namespace TaskService.Controllers
 		}
 
 		[HttpGet("tasks")]
-		public IActionResult GetAllJobs()
+		public IActionResult GetAllJobs([FromQuery] JobFilterDTO jobFilter, [FromQuery] int pageNumber = 1)
 		{
-			var jobs = _jobRepo.GetAllJobs().Result;
+			var jobs = _jobRepo.GetAllJobs(jobFilter, pageNumber).Result;
 			if (jobs == null || jobs.Count == 0)
 				return NotFound("Jobs not found");
 
@@ -28,7 +28,7 @@ namespace TaskService.Controllers
 		}
 
 		[HttpGet("tasks/{id}")]
-		public IActionResult GetJobById(int id)
+		public IActionResult GetJobById([FromQuery] int id)
 		{
 			var job = _jobRepo.GetJobById(id).Result;
 			if (job == null)
@@ -50,7 +50,7 @@ namespace TaskService.Controllers
 		}
 
 		[HttpPut("tasks/{id}")]
-		public IActionResult UpdateJob(int id, [FromBody] UpdateJobDTO updateData)
+		public IActionResult UpdateJob([FromQuery] int id, [FromBody] UpdateJobDTO updateData)
 		{
 			if (updateData == null)
 				return BadRequest("Update data invalid");
@@ -62,7 +62,7 @@ namespace TaskService.Controllers
 		}
 
 		[HttpDelete("tasks/{id}")]
-		public IActionResult DeleteJob(int id)
+		public IActionResult DeleteJob([FromQuery] int id)
 		{
 			if (_jobRepo.DeleteJob(id).Result)
 				return Ok();
@@ -71,7 +71,7 @@ namespace TaskService.Controllers
 		}
 
 		[HttpPut("tasks/{id}/assign")]
-		public IActionResult SetExecutor(int id, [FromBody] string executor)
+		public IActionResult SetExecutor([FromQuery] int id, [FromBody] string executor)
 		{
 			if (String.IsNullOrEmpty(executor))
 				return BadRequest("Executor's data invalid");

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 using TaskService.Database;
 using TaskService.DTOs;
@@ -9,15 +10,34 @@ namespace TaskService.Repositories
 	public class JobRepo : IJobRepo
 	{
 		private readonly AppDbContext _context;
+		private readonly int _pageSize = 20;
 
 		public JobRepo (AppDbContext context)
 		{
 			_context = context;
 		}
 
-		public async Task<List<Job>> GetAllJobs()
+		public async Task<List<Job>> GetAllJobs(JobFilterDTO jobFilter, int pageNumber)
 		{
-			return await _context.Jobs.Where(x => x.IsDelete == false).ToListAsync();
+			var jobs = SetFilterAndPagination(pageNumber, jobFilter);
+
+			return await jobs.OrderBy(job => job.Name).ToListAsync();
+		}
+
+		private IQueryable<Job> SetFilterAndPagination(int pageNumber, JobFilterDTO jobFilter)
+		{
+			var jobs = _context.Jobs.Where(job => job.IsDelete == false &&
+			EF.Functions.Like(job.Name!, $"%{jobFilter.Name}%") &
+			EF.Functions.Like(job.Status.ToString(), $"%{(jobFilter.Status == Status.Null ? "" : jobFilter.Status)}%") &
+			EF.Functions.Like(job.Executor!, $"%{jobFilter.Executor}%") &
+			EF.Functions.Like(job.Description!, $"%{jobFilter.Description}%") &
+			EF.Functions.Like(job.DeadLine.ToString()!, $"%{(jobFilter.DeadLine == DateTime.MinValue ? "" : jobFilter.DeadLine)}%") &
+			EF.Functions.Like(job.Priority.ToString()!, $"%{(jobFilter.Priority == Priority.Null ? "" : jobFilter.Priority)}%")
+			);
+			var startIndex = (pageNumber - 1) * _pageSize;
+			var pagedItems = jobs.Skip(startIndex).Take(_pageSize);
+
+			return pagedItems;
 		}
 
 		public async Task<Job?> GetJobById(int id)
