@@ -20,6 +20,9 @@ namespace TaskService.Controllers
 		[HttpGet("tasks")]
 		public IActionResult GetAllJobs([FromQuery] JobFilterDTO jobFilter, [FromQuery] int pageNumber = 1)
 		{
+			if (pageNumber <= 0)
+				return BadRequest("Invalid page number");
+
 			var jobs = _jobRepo.GetAllJobs(jobFilter, pageNumber).Result;
 			if (jobs == null || jobs.Count == 0)
 				return NotFound("Jobs not found");
