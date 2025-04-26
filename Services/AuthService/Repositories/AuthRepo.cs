@@ -2,7 +2,7 @@
 using AuthService.DTOs;
 using AuthService.Handlers;
 using AuthService.Models;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthService.Repositories
 {
@@ -67,6 +67,25 @@ namespace AuthService.Repositories
 			await _context.SaveChangesAsync();
 
 			return refreshToken;
+		}
+
+		public async Task<List<string>> Login(LoginDTO loginData)
+		{
+			if (loginData.Email == null)
+				return null!;
+
+			var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == loginData.Email);
+
+			if (user == null)
+				return null!;
+
+			if (!_passwordHandler.VerifyPassword(user, loginData.Password))
+				return null!;
+
+			var token = _jwtHandler.GenerateJwtToken(user);
+			var refreshToken = await CreateRefreshToken(user);
+
+			return [token, refreshToken];
 		}
 	}
 }

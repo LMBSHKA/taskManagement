@@ -17,9 +17,10 @@ namespace AuthService.Handlers
 		public bool VerifyPassword(User user, string password)
 		{
 			var e = new PasswordHasher<User>();
-			e.VerifyHashedPassword(user, user.Password!, password);
-			
-			return true;
+			if (e.VerifyHashedPassword(user, user.Password!, password) == PasswordVerificationResult.Success)
+				return true;
+
+			return false;
 		}
 	}
 }
