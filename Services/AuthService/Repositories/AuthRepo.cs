@@ -119,5 +119,20 @@ namespace AuthService.Repositories
 
 			return intUserId;
 		}
+
+		public async Task<string> Refresh(string refreshToken)
+		{
+			var refreshData = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == refreshToken);
+			if (refreshData == null || refreshData.Expiry < DateTime.UtcNow)
+				return null!;
+
+			var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == refreshData.UserId);
+			if (user == null) 
+				return null!;
+
+			var accessToken = _jwtHandler.GenerateJwtToken(user);
+
+			return accessToken;
+		}
 	}
 }
