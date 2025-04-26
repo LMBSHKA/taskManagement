@@ -1,8 +1,11 @@
 ﻿using AuthService.DTOs;
 using AuthService.Repositories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace AuthService.Controllers
 {
@@ -18,9 +21,9 @@ namespace AuthService.Controllers
 		}
 
 		[HttpPost("register")]
-		public IActionResult Registration([FromBody] RegistrationDTO registrationData)
+		public async Task<IActionResult> Registration([FromBody] RegistrationDTO registrationData)
 		{
-			var tokenList = _authRepo.Registration(registrationData).Result;
+			var tokenList = await _authRepo.Registration(registrationData);
 			if (tokenList == null)
 				return BadRequest("Registration failed");
 
@@ -31,12 +34,12 @@ namespace AuthService.Controllers
 		}
 
 		[HttpPost("login")]
-		public IActionResult Login([FromBody] LoginDTO loginData)
+		public async Task<IActionResult> Login([FromBody] LoginDTO loginData)
 		{
 			if (loginData == null)
 				return BadRequest("Invalid login data");
 
-			var tokenList = _authRepo.Login(loginData).Result;
+			var tokenList = await _authRepo.Login(loginData);
 			if (tokenList == null)
 				return BadRequest("Invalid login data");
 
@@ -44,6 +47,20 @@ namespace AuthService.Controllers
 			var refreshToken = tokenList[1];
 
 			return Ok(new { accessToken, refreshToken });
+		}
+
+		[HttpGet("me")]
+		public async Task<IActionResult> GetUserInfo()
+		{
+			var accessToken = await HttpContext.GetTokenAsync("access_token");
+			if (accessToken == null)
+				return BadRequest("Invalid token");
+
+			var user = await _authRepo.GetUserInfo(accessToken!);
+			if (user == null)
+				return BadRequest("User not found");
+
+			return Ok(user);
 		}
 	}
 }

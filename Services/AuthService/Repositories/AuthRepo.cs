@@ -3,6 +3,7 @@ using AuthService.DTOs;
 using AuthService.Handlers;
 using AuthService.Models;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace AuthService.Repositories
 {
@@ -86,6 +87,37 @@ namespace AuthService.Repositories
 			var refreshToken = await CreateRefreshToken(user);
 
 			return [token, refreshToken];
+		}
+
+		public async Task<UserInfoDTO> GetUserInfo(string accessToken)
+		{
+			var userId = DecodeToken(accessToken);
+			if (userId == 0)
+				return null!;
+
+			var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+			if (user == null)
+				return null!;
+
+			return new UserInfoDTO(user.Name, user.Surname, user.Email);
+		}
+
+		private int DecodeToken(string accessToken)
+		{
+			var handler = new JwtSecurityTokenHandler();
+			var readToken = handler.ReadToken(accessToken);
+			var decodedToken = readToken as JwtSecurityToken;
+			if (decodedToken == null)
+				return 0;
+
+			var stringUserId = decodedToken.Claims.First(claim => claim.Type == "sub").Value;
+			if (stringUserId == null)
+				return 0;
+
+			if (!int.TryParse(stringUserId, out int intUserId))
+				return 0;
+
+			return intUserId;
 		}
 	}
 }
