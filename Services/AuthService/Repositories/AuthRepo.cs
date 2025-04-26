@@ -27,6 +27,9 @@ namespace AuthService.Repositories
 			if (registrationData == null)
 				return null!;
 
+			if (await _context.Users.FirstOrDefaultAsync(x => x.Email == registrationData.Email) != null)
+				return null!;
+
 			var newUser = new User(
 				registrationData.Name!,
 				registrationData.Surname!,
@@ -54,20 +57,32 @@ namespace AuthService.Repositories
 
 		private async Task<string> CreateRefreshToken(User user)
 		{
-			var refreshToken = _jwtHandler.GetRefreshToken();
+			var refreshTokenData = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.UserId == user.Id);
 			var refreshTokenValidity = _configuration.GetValue<int>("JwtConfig:RefreshTokenValidityDays");
 			var expiry = DateTime.UtcNow.AddDays(refreshTokenValidity);
-
-			await _context.RefreshTokens.AddAsync(new RefreshToken
+			if (refreshTokenData == null)
 			{
+				var refreshToken = _jwtHandler.GetRefreshToken();
 
-				Token = refreshToken,
-				Expiry = expiry,
-				UserId = user.Id,
-			});
+				await _context.RefreshTokens.AddAsync(new RefreshToken
+				{
+
+					Token = refreshToken,
+					Expiry = expiry,
+					UserId = user.Id,
+				});
+				await _context.SaveChangesAsync();
+
+				return refreshToken;
+			}
+
+			var newRefreshToken = _jwtHandler.GetRefreshToken();
+			refreshTokenData.Expiry = expiry;
+			refreshTokenData.Token = newRefreshToken;
+			_context.RefreshTokens.Update(refreshTokenData);
 			await _context.SaveChangesAsync();
 
-			return refreshToken;
+			return newRefreshToken;
 		}
 
 		public async Task<List<string>> Login(LoginDTO loginData)
