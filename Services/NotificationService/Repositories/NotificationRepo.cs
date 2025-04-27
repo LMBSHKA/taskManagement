@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using NotificationService.Database;
 using NotificationService.DTO;
 using NotificationService.Models;
+using NotificationService.SignalR;
+using System.Security.Claims;
 
 namespace NotificationService.Repositories
 {
@@ -9,13 +12,14 @@ namespace NotificationService.Repositories
 	{
 		private readonly AppDbContext _context;
 
-		public NotificationRepo(AppDbContext context) 
+		public NotificationRepo(AppDbContext context)
 		{ 
 			_context = context;
 		}
 
 		public async Task<bool> CreateNotification(Notification notification)
 		{
+			
 			if (notification == null)
 				return false;
 

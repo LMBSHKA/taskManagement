@@ -19,7 +19,8 @@ namespace NotificationService.Controllers
 
 		[HttpPost]
 		public async Task<IActionResult> CreateNotification([FromBody] Notification notification)
-		{ 
+		{
+			HttpClient
 			if (await _notificationRepo.CreateNotification(notification))
 				return Ok("notification created");
 
@@ -46,6 +47,12 @@ namespace NotificationService.Controllers
 				return Ok();
 
 			return BadRequest("Reading failed");
+		}
+
+		[HttpGet("Test")]
+		public IActionResult Test([FromQuery] int id)
+		{
+			return Ok();
 		}
 	}
 }

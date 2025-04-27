@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NotificationService.Database;
 using NotificationService.Repositories;
+using NotificationService.SignalR;
 
 internal class Program
 {
@@ -10,6 +11,9 @@ internal class Program
 
 		// Add services to the container.
 		builder.Services.AddScoped<INotificationRepo, NotificationRepo>();
+
+		//Connect SignalR
+		builder.Services.AddSignalR();
 
 		//Create local storage Db
 		builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
@@ -27,6 +31,8 @@ internal class Program
 			app.UseSwagger();
 			app.UseSwaggerUI();
 		}
+
+		app.MapHub<NotificationHub>("/notify");
 
 		app.UseHttpsRedirection();
 
