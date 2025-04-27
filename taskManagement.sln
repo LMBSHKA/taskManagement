@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskService", "Services\Tas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService", "Services\AuthService\AuthService.csproj", "{55561D6A-4360-4A51-B99C-48A16C8CF5CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "Services\NotificationService\NotificationService.csproj", "{15EF455C-1047-49A4-A4C8-70285CE4433D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{55561D6A-4360-4A51-B99C-48A16C8CF5CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55561D6A-4360-4A51-B99C-48A16C8CF5CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55561D6A-4360-4A51-B99C-48A16C8CF5CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15EF455C-1047-49A4-A4C8-70285CE4433D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15EF455C-1047-49A4-A4C8-70285CE4433D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15EF455C-1047-49A4-A4C8-70285CE4433D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15EF455C-1047-49A4-A4C8-70285CE4433D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

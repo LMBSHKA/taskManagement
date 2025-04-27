@@ -62,6 +62,7 @@ namespace TaskService.Repositories
 			}
 		}
 
+		//TODO Send notify
 		public async Task<bool> UpdateJob(int id, UpdateJobDTO updateData)
 		{
 			var job = await _context.Jobs.FindAsync(id);
@@ -93,6 +94,7 @@ namespace TaskService.Repositories
 			job.Priority = updateData.Priority == Priority.Null ? job.Priority : updateData.Priority;
 		}
 
+		//TODO Send notify
 		public async Task<bool> DeleteJob(int id)
 		{
 			var job = await _context.Jobs.FindAsync(id);
@@ -107,6 +109,7 @@ namespace TaskService.Repositories
 			return true;
 		}
 
+		//TODO Send notify
 		public async Task<bool> SetExecutor(int id, string executor)
 		{
 			var job = await _context.Jobs.FindAsync(id);
