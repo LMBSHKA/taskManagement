@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NotificationService.Models;
 using NotificationService.Repositories;
 using System.Diagnostics;
@@ -46,12 +47,6 @@ namespace NotificationService.Controllers
 				return Ok();
 
 			return BadRequest("Reading failed");
-		}
-
-		[HttpGet("Test")]
-		public IActionResult Test([FromQuery] int id)
-		{
-			return Ok();
 		}
 	}
 }

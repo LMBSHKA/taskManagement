@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService", "Services\Aut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "Services\NotificationService\NotificationService.csproj", "{15EF455C-1047-49A4-A4C8-70285CE4433D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "Services\ApiGateway\ApiGateway.csproj", "{022C2748-9A16-4715-9D86-BAEC9D3C4DBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{15EF455C-1047-49A4-A4C8-70285CE4433D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15EF455C-1047-49A4-A4C8-70285CE4433D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15EF455C-1047-49A4-A4C8-70285CE4433D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{022C2748-9A16-4715-9D86-BAEC9D3C4DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{022C2748-9A16-4715-9D86-BAEC9D3C4DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{022C2748-9A16-4715-9D86-BAEC9D3C4DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{022C2748-9A16-4715-9D86-BAEC9D3C4DBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
