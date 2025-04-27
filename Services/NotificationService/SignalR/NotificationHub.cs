@@ -11,7 +11,6 @@ namespace NotificationService.SignalR
 		{
 			var httpContext = Context.GetHttpContext();
 			var userId = httpContext!.Request.Query["userId"].ToString();
-			Console.WriteLine(userId);
 			if (userId != null)
 			{
 				await Groups.AddToGroupAsync(Context.ConnectionId, userId);
