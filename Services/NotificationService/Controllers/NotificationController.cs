@@ -20,6 +20,7 @@ namespace NotificationService.Controllers
 		[HttpPost]
 		public async Task<IActionResult> CreateNotification([FromBody] Notification notification)
 		{
+			HttpClient
 			if (await _notificationRepo.CreateNotification(notification))
 				return Ok("notification created");
 
