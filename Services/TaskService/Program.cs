@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskService.Database;
 using TaskService.Repositories;
+using TaskService.Requests;
 
 internal class Program
 {
@@ -10,6 +11,7 @@ internal class Program
 
 		// Add services to the container.
 		builder.Services.AddScoped<IJobRepo, JobRepo>();
+		builder.Services.AddScoped<IRequestsToNotificationService, RequestsToNotificationService>();
 
 		//Create local storage Db
 		builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));

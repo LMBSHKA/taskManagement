@@ -1,21 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NotificationService.Models
+namespace TaskService.DTOs
 {
-	public class Notification
+	public class RequestToNotificationDTO
 	{
-		[Key]
-		public int Id { get; set; }
-		[Required]
 		public int JobId { get; set; }
-		[Required]
 		public int UserId { get; set; }
-		[Required]
 		public TypeNotification Type { get; set; }
-		[Required]
-		public bool IsRead { get; set; } = false;
-		[Required]
-		public DateTime CreatedAt { get; set; }
+
+		public RequestToNotificationDTO() { }
+
+		public RequestToNotificationDTO(int jobId, int userId, TypeNotification type)
+		{
+			JobId = jobId;
+			UserId = userId;
+			Type = type;
+		}
 	}
 
 	public enum TypeNotification

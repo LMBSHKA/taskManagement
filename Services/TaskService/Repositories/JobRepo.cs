@@ -1,19 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Immutable;
+﻿using Microsoft.EntityFrameworkCore;
 using TaskService.Database;
 using TaskService.DTOs;
 using TaskService.Models;
+using TaskService.Requests;
 
 namespace TaskService.Repositories
 {
 	public class JobRepo : IJobRepo
 	{
 		private readonly AppDbContext _context;
-		private readonly int _pageSize = 20;
+		private readonly IRequestsToNotificationService _requestsToNotificationService;
+		private int _pageSize { get; } = 20;
 
-		public JobRepo (AppDbContext context)
+		public JobRepo(AppDbContext context, IRequestsToNotificationService requestsToNotificationService)
 		{
+			_requestsToNotificationService = requestsToNotificationService;
 			_context = context;
 		}
 
@@ -63,7 +64,6 @@ namespace TaskService.Repositories
 			}
 		}
 
-		//TODO Send notify
 		public async Task<bool> UpdateJob(int id, UpdateJobDTO updateData)
 		{
 			var job = await _context.Jobs.FindAsync(id);
@@ -76,6 +76,8 @@ namespace TaskService.Repositories
 			{
 				_context.Jobs.Update(job);
 				await _context.SaveChangesAsync();
+
+				await _requestsToNotificationService.RequestToCreateNotification(job, TypeNotification.UpdateJob);
 
 				return true;
 			}
@@ -95,7 +97,6 @@ namespace TaskService.Repositories
 			job.Priority = updateData.Priority == Priority.Null ? job.Priority : updateData.Priority;
 		}
 
-		//TODO Send notify
 		public async Task<bool> DeleteJob(int id)
 		{
 			var job = await _context.Jobs.FindAsync(id);
@@ -104,13 +105,22 @@ namespace TaskService.Repositories
 				return false;
 
 			job.IsDelete = true;
-			_context.Jobs.Update(job);
-			await _context.SaveChangesAsync();
+			try
+			{
+				_context.Jobs.Update(job);
+				await _context.SaveChangesAsync();
 
-			return true;
+				await _requestsToNotificationService.RequestToCreateNotification(job, TypeNotification.DeleteJob);
+
+				return true;
+			}
+
+			catch
+			{
+				return false;
+			}
 		}
 
-		//TODO Send notify
 		public async Task<bool> AsignExecutor(int id, AsignExecutorDTO executor)
 		{
 			var job = await _context.Jobs.FindAsync(id);
@@ -126,6 +136,8 @@ namespace TaskService.Repositories
 			{
 				_context.Jobs.Update(job);
 				await _context.SaveChangesAsync();
+
+				await _requestsToNotificationService.RequestToCreateNotification(job, TypeNotification.SetExecutor);
 
 				return true;
 			}
