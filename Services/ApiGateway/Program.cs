@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Ocelot.Provider.Polly;
 using System.Text;
 
 internal class Program
@@ -39,7 +40,8 @@ internal class Program
 			.SetBasePath(builder.Environment.ContentRootPath)
 			.AddOcelot();
 		builder.Services
-			.AddOcelot(builder.Configuration);
+			.AddOcelot(builder.Configuration)
+			.AddPolly();
 
 		builder.Services.AddControllers();
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

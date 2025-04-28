@@ -77,7 +77,6 @@ namespace TaskService.Controllers
 		[HttpPut("tasks/{id}/assign")]
 		public async Task<IActionResult> SetExecutor(int id, [FromBody] string executor)
 		{
-			var access = await HttpContext.GetTokenAsync("access_token");
 			if (String.IsNullOrEmpty(executor))
 				return BadRequest("Executor's data invalid");
 
