@@ -15,8 +15,11 @@ internal class Program
 		//Connect SignalR
 		builder.Services.AddSignalR();
 
-		//Create local storage Db
-		builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+		//Connect Db
+		builder.Services.AddDbContext<AppDbContext>(opt =>
+		{
+			opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+		});
 
 		builder.Services.AddControllers();
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

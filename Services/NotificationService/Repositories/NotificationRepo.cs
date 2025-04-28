@@ -25,7 +25,7 @@ namespace NotificationService.Repositories
 
 			try
 			{
-				notification.CreatedAt = DateTime.Now;
+				notification.CreatedAt = DateTime.Now.ToString("dd.MM.yyyy");
 				notification.IsRead = false;
 				await _context.Notifications.AddAsync(notification);
 				await _context.SaveChangesAsync();

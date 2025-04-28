@@ -14,8 +14,7 @@ namespace NotificationService.Models
 		public TypeNotification Type { get; set; }
 		[Required]
 		public bool IsRead { get; set; } = false;
-		[Required]
-		public DateTime CreatedAt { get; set; }
+		public string? CreatedAt { get; set; }
 	}
 
 	public enum TypeNotification
