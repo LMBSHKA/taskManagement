@@ -17,8 +17,11 @@ internal class Program
 		builder.Services.AddScoped<IPasswordHandler, PasswordHandler>();
 		builder.Services.AddScoped<IJWTHandler, JWTHandler>();
 
-		//Create local storage Db
-		builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+		//Connect Db
+		builder.Services.AddDbContext<AppDbContext>(opt =>
+		{
+			opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+		});
 
 		//Set auth options
 		builder.Services.AddAuthentication(options =>

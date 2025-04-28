@@ -68,7 +68,7 @@ namespace AuthService.Repositories
 				{
 
 					Token = refreshToken,
-					Expiry = expiry,
+					Expiry = expiry.ToString("dd.MM.yyyy"),
 					UserId = user.Id,
 				});
 				await _context.SaveChangesAsync();
@@ -77,7 +77,7 @@ namespace AuthService.Repositories
 			}
 
 			var newRefreshToken = _jwtHandler.GetRefreshToken();
-			refreshTokenData.Expiry = expiry;
+			refreshTokenData.Expiry = expiry.ToString("dd.MM.yyyy");
 			refreshTokenData.Token = newRefreshToken;
 			_context.RefreshTokens.Update(refreshTokenData);
 			await _context.SaveChangesAsync();
@@ -138,7 +138,7 @@ namespace AuthService.Repositories
 		public async Task<string> Refresh(string refreshToken)
 		{
 			var refreshData = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == refreshToken);
-			if (refreshData == null || refreshData.Expiry < DateTime.UtcNow)
+			if (refreshData == null || Convert.ToDateTime(refreshData.Expiry) < DateTime.UtcNow)
 				return null!;
 
 			var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == refreshData.UserId);

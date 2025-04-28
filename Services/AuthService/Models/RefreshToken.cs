@@ -8,6 +8,6 @@ namespace AuthService.Models
 		public Guid Id { get; set; }
 		public int UserId { get; set; }
 		public string? Token { get; set; }
-		public DateTime Expiry { get; set; }
+		public string? Expiry { get; set; }
 	}
 }
