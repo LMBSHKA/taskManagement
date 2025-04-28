@@ -13,8 +13,11 @@ internal class Program
 		builder.Services.AddScoped<IJobRepo, JobRepo>();
 		builder.Services.AddScoped<IRequestsToNotificationService, RequestsToNotificationService>();
 
-		//Create local storage Db
-		builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+		//Connect Db
+		builder.Services.AddDbContext<AppDbContext>(opt =>
+		{
+			opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+		});
 
 		builder.Services.AddControllers();
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -29,8 +32,6 @@ internal class Program
 			app.UseSwagger();
 			app.UseSwaggerUI();
 		}
-
-		PrepDb.PrepPopulation(app);
 
 		app.UseAuthorization();
 

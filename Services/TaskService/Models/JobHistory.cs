@@ -13,11 +13,11 @@ namespace TaskService.Models
 		public string? ExecutorSurname { get; set; }
 		public int ExecutorId { get; set; }
 		public string? Description { get; set; }
-		public DateTime DeadLine { get; set; }
+		public string? DeadLine { get; set; }
 		public Priority Priority { get; set; }
 		public bool IsDelete { get; set; }
 		public string? OperationType { get; set; }
-		public DateTime ChangedAt { get; set; }
+		public string? ChangedAt { get; set; }
 
 		public JobHistory() { }
 
@@ -28,11 +28,11 @@ namespace TaskService.Models
 			string? executorSurname,
 			int executorId,
 			string? description, 
-			DateTime deadLine, 
+			string deadLine, 
 			Priority priority, 
 			bool isDelete, 
 			string? operationType, 
-			DateTime changedAt)
+			string changedAt)
 		{
 			JobId = jobId;
 			Name = name;

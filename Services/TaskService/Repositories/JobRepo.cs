@@ -27,14 +27,13 @@ namespace TaskService.Repositories
 
 		private IQueryable<Job> SetFilterAndPagination(int pageNumber, JobFilterDTO jobFilter)
 		{
-			var jobs = _context.Jobs.Where(job => job.IsDelete == false &&
-			EF.Functions.Like(job.Name!, $"%{jobFilter.Name}%") &
-			EF.Functions.Like(job.Status.ToString(), $"%{(jobFilter.Status == Status.Null ? "" : jobFilter.Status)}%") &
-			EF.Functions.Like(job.ExecutorName!, $"%{jobFilter.ExecutorName}%") &
-			EF.Functions.Like(job.ExecutorSurname!, $"%{jobFilter.ExecutorSurname}%") &
-			EF.Functions.Like(job.Description!, $"%{jobFilter.Description}%") &
-			EF.Functions.Like(job.DeadLine.ToString()!, $"%{(jobFilter.DeadLine == DateTime.MinValue ? "" : jobFilter.DeadLine)}%") &
-			EF.Functions.Like(job.Priority.ToString()!, $"%{(jobFilter.Priority == Priority.Null ? "" : jobFilter.Priority)}%")
+			var jobs = _context.Jobs
+				.Where(job => 
+				job.IsDelete == false && 
+				EF.Functions.Like(job.Name!, $"%{jobFilter.Name}%") &
+				EF.Functions.Like(job.ExecutorName!, $"%{jobFilter.ExecutorName}%") &
+				EF.Functions.Like(job.ExecutorSurname!, $"%{jobFilter.ExecutorSurname}%") &
+				EF.Functions.Like(job.Description!, $"%{jobFilter.Description}%")
 			);
 			var startIndex = (pageNumber - 1) * _pageSize;
 			var pagedItems = jobs.Skip(startIndex).Take(_pageSize);
@@ -92,7 +91,7 @@ namespace TaskService.Repositories
 		{
 			job.Name = String.IsNullOrEmpty(updateData.Name) ? job.Name : updateData.Name;
 			job.Status = updateData.Status == Status.Null ? job.Status : updateData.Status;
-			job.DeadLine = updateData.DeadLine == DateTime.MinValue ? job.DeadLine : updateData.DeadLine;
+			job.DeadLine = updateData.DeadLine == DateTime.MinValue ? job.DeadLine : updateData.DeadLine.ToString("dd.MM.yyyy");
 			job.Description = String.IsNullOrEmpty(updateData.Description) ? job.Description : updateData.Description;
 			job.Priority = updateData.Priority == Priority.Null ? job.Priority : updateData.Priority;
 		}

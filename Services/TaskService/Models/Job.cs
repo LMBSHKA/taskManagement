@@ -15,7 +15,7 @@ namespace TaskService.Models
 		public int ExecutorId { get; set; }
 		public string? Description { get; set; } = string.Empty;
 		[Required]
-		public DateTime DeadLine { get; set; }
+		public string? DeadLine { get; set; }
 		[Required]
 		public Priority Priority { get; set; }
 		public bool IsDelete { get; set; }
@@ -23,7 +23,7 @@ namespace TaskService.Models
 		public Job() { }
 
 		public Job (string name, Status status, string description,
-			DateTime deadLine, Priority priority, bool isDelete)
+			string deadLine, Priority priority, bool isDelete)
 		{
 			Name = name;
 			Status = status;

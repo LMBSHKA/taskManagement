@@ -28,11 +28,11 @@ namespace TaskService.Database
 						entry.Entity.ExecutorSurname,
 						entry.Entity.ExecutorId,
 						entry.Entity.Description,
-						entry.Entity.DeadLine,
+						entry.Entity.DeadLine!,
 						entry.Entity.Priority,
 						entry.Entity.IsDelete,
 						entry.State.ToString(),
-						DateTime.Now
+						DateTime.Now.ToString("dd.MM.yyyy")
 						);
 
 					historyEntries.Add(history);
