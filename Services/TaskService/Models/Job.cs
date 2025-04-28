@@ -7,22 +7,26 @@ namespace TaskService.Models
 	{
 		[Key]
 		public int Id { get; set; }
+		[Required]
 		public string? Name { get; set; }
-		public Status Status { get; set; }
-		public string? Executor { get; set; }
-		public string? Description { get; set; }
+		public Status Status { get; set; } = Status.Created;
+		public string? ExecutorName { get; set; } = "Not set";
+		public string? ExecutorSurname { get; set; } = "Not set";
+		public int ExecutorId { get; set; }
+		public string? Description { get; set; } = string.Empty;
+		[Required]
 		public DateTime DeadLine { get; set; }
+		[Required]
 		public Priority Priority { get; set; }
 		public bool IsDelete { get; set; }
 
 		public Job() { }
 
-		public Job (string name, Status status, string executor, string description,
+		public Job (string name, Status status, string description,
 			DateTime deadLine, Priority priority, bool isDelete)
 		{
 			Name = name;
 			Status = status;
-			Executor = executor;
 			Description = description;
 			DeadLine = deadLine;
 			Priority = priority;

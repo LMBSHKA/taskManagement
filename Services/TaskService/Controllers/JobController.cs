@@ -38,7 +38,7 @@ namespace TaskService.Controllers
 			if (job == null)
 				return NotFound("job does not exist");
 
-			return Ok(new { job.Name, job.Description, job.Status, job.DeadLine, job.Executor, job.Priority });
+			return Ok(new { job.Name, job.Description, job.Status, job.DeadLine, job.ExecutorName, job.ExecutorSurname, job.Priority });
 		}
 
 		[HttpPost("tasks")]

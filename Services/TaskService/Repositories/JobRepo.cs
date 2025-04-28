@@ -29,7 +29,8 @@ namespace TaskService.Repositories
 			var jobs = _context.Jobs.Where(job => job.IsDelete == false &&
 			EF.Functions.Like(job.Name!, $"%{jobFilter.Name}%") &
 			EF.Functions.Like(job.Status.ToString(), $"%{(jobFilter.Status == Status.Null ? "" : jobFilter.Status)}%") &
-			EF.Functions.Like(job.Executor!, $"%{jobFilter.Executor}%") &
+			EF.Functions.Like(job.ExecutorName!, $"%{jobFilter.ExecutorName}%") &
+			EF.Functions.Like(job.ExecutorSurname!, $"%{jobFilter.ExecutorSurname}%") &
 			EF.Functions.Like(job.Description!, $"%{jobFilter.Description}%") &
 			EF.Functions.Like(job.DeadLine.ToString()!, $"%{(jobFilter.DeadLine == DateTime.MinValue ? "" : jobFilter.DeadLine)}%") &
 			EF.Functions.Like(job.Priority.ToString()!, $"%{(jobFilter.Priority == Priority.Null ? "" : jobFilter.Priority)}%")
@@ -117,7 +118,8 @@ namespace TaskService.Repositories
 			if (job == null || job.IsDelete == true)
 				return false;
 
-			job.Executor = executor;
+			//TODO
+			job.ExecutorName = executor;
 
 			try
 			{

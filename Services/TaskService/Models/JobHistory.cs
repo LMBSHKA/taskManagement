@@ -9,7 +9,9 @@ namespace TaskService.Models
 		public int JobId { get; set; }
 		public string? Name { get; set; }
 		public Status Status { get; set; }
-		public string? Executor { get; set; }
+		public string? ExecutorName { get; set; }
+		public string? ExecutorSurname { get; set; }
+		public int ExecutorId { get; set; }
 		public string? Description { get; set; }
 		public DateTime DeadLine { get; set; }
 		public Priority Priority { get; set; }
@@ -22,7 +24,9 @@ namespace TaskService.Models
 		public JobHistory(int jobId, 
 			string? name, 
 			Status status, 
-			string? executor, 
+			string? executorName, 
+			string? executorSurname,
+			int executorId,
 			string? description, 
 			DateTime deadLine, 
 			Priority priority, 
@@ -33,7 +37,9 @@ namespace TaskService.Models
 			JobId = jobId;
 			Name = name;
 			Status = status;
-			Executor = executor;
+			ExecutorName = executorName;
+			ExecutorSurname = executorSurname;
+			ExecutorId = executorId;
 			Description = description;
 			DeadLine = deadLine;
 			Priority = priority;

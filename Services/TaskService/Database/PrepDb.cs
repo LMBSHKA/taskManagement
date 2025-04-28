@@ -17,7 +17,7 @@ namespace TaskService.Database
 			if (!context.Jobs.Any())
 			{
 				context.Jobs.AddRange(
-					new Job("test1", Status.Created, "Vasay", "test test", new DateTime(2025, 4, 30), Priority.Major, false)
+					new Job("test1", Status.Created, "test test", new DateTime(2025, 4, 30), Priority.Major, false)
 					);
 
 				context.SaveChanges();
