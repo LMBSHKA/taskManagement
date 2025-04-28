@@ -10,6 +10,6 @@ namespace TaskService.Repositories
 		Task<bool> CreateJob(Job job);
 		Task<bool> UpdateJob(int id, UpdateJobDTO updateData);
 		Task<bool> DeleteJob(int id);
-		Task<bool> SetExecutor(int id, string executor);
+		Task<bool> AsignExecutor(int id, AsignExecutorDTO executor);
 	}
 }

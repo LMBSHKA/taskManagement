@@ -75,12 +75,12 @@ namespace TaskService.Controllers
 		}
 
 		[HttpPut("tasks/{id}/assign")]
-		public async Task<IActionResult> SetExecutor(int id, [FromBody] string executor)
+		public async Task<IActionResult> SetExecutor(int id, [FromBody] AsignExecutorDTO executor)
 		{
-			if (String.IsNullOrEmpty(executor))
+			if (executor == null)
 				return BadRequest("Executor's data invalid");
 
-			if (await _jobRepo.SetExecutor(id, executor))
+			if (await _jobRepo.AsignExecutor(id, executor))
 				return Ok();
 
 			return BadRequest("The set is failed");

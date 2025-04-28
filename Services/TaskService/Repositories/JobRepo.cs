@@ -111,15 +111,16 @@ namespace TaskService.Repositories
 		}
 
 		//TODO Send notify
-		public async Task<bool> SetExecutor(int id, string executor)
+		public async Task<bool> AsignExecutor(int id, AsignExecutorDTO executor)
 		{
 			var job = await _context.Jobs.FindAsync(id);
 
 			if (job == null || job.IsDelete == true)
 				return false;
 
-			//TODO
-			job.ExecutorName = executor;
+			job.ExecutorName = executor.ExecutorName;
+			job.ExecutorSurname = executor.ExecutorSurname;
+			job.ExecutorId = executor.ExecutorId;
 
 			try
 			{
