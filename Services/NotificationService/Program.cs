@@ -34,8 +34,6 @@ internal class Program
 
 		app.MapHub<NotificationHub>("/notify");
 
-		app.UseHttpsRedirection();
-
 		app.UseAuthorization();
 
 		app.MapControllers();

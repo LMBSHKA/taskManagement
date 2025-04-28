@@ -32,8 +32,6 @@ internal class Program
 
 		PrepDb.PrepPopulation(app);
 
-		app.UseHttpsRedirection();
-
 		app.UseAuthorization();
 
 		app.MapControllers();
