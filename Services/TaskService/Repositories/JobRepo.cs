@@ -10,12 +10,14 @@ namespace TaskService.Repositories
 	{
 		private readonly AppDbContext _context;
 		private readonly IRequestsToNotificationService _requestsToNotificationService;
+		private readonly ILogger<JobRepo> _logger;
 		private int _pageSize { get; } = 20;
 
-		public JobRepo(AppDbContext context, IRequestsToNotificationService requestsToNotificationService)
+		public JobRepo(AppDbContext context, IRequestsToNotificationService requestsToNotificationService, ILogger<JobRepo> logger)
 		{
 			_requestsToNotificationService = requestsToNotificationService;
 			_context = context;
+			_logger = logger;
 		}
 
 		public async Task<List<Job>> GetAllJobs(JobFilterDTO jobFilter, int pageNumber)
@@ -59,6 +61,7 @@ namespace TaskService.Repositories
 
 			catch
 			{
+				_logger.LogError($"Job not created, job id: {job.Id}, job name: {job.Name}");
 				return false;
 			}
 		}
@@ -83,6 +86,7 @@ namespace TaskService.Repositories
 
 			catch
 			{
+				_logger.LogError($"Job not update, job id: {id}");
 				return false;
 			}
 		}
@@ -116,6 +120,7 @@ namespace TaskService.Repositories
 
 			catch
 			{
+				_logger.LogError($"Job not delete, job id: {id}");
 				return false;
 			}
 		}
@@ -125,7 +130,10 @@ namespace TaskService.Repositories
 			var job = await _context.Jobs.FindAsync(id);
 
 			if (job == null || job.IsDelete == true)
+			{
+				_logger.LogError($"Executor not assign, job id: {id}, executor id: {executor.ExecutorId}");
 				return false;
+			}
 
 			job.ExecutorName = executor.ExecutorName;
 			job.ExecutorSurname = executor.ExecutorSurname;
@@ -143,6 +151,7 @@ namespace TaskService.Repositories
 
 			catch
 			{
+				_logger.LogError($"Executor not assign, job id: {id}, executor id: {executor.ExecutorId}");
 				return false;
 			}
 		}

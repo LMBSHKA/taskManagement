@@ -6,6 +6,12 @@ namespace TaskService.Database
 {
 	public class JobAuditInterceptor : SaveChangesInterceptor
 	{
+		private readonly ILogger<JobAuditInterceptor> _logger;
+
+		public JobAuditInterceptor(ILogger<JobAuditInterceptor> logger)
+		{
+			_logger = logger;
+		}
 		public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
 		DbContextEventData eventData,
 		InterceptionResult<int> result,
@@ -38,10 +44,18 @@ namespace TaskService.Database
 					historyEntries.Add(history);
 				}
 			}
+			try
+			{
+				context.Set<JobHistory>().AddRange(historyEntries);
 
-			context.Set<JobHistory>().AddRange(historyEntries);
+				return base.SavingChangesAsync(eventData, result, cancellationToken);
+			}
 
-			return base.SavingChangesAsync(eventData, result, cancellationToken);
+			catch
+			{
+				_logger.LogCritical("Saving history failed");
+				throw new Exception("saving history failed");
+			}
 		}
 	}
 }
