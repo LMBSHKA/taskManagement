@@ -7,6 +7,15 @@ namespace TaskService.Requests
 {
 	public class RequestsToNotificationService : IRequestsToNotificationService
 	{
+		private readonly ILogger _logger;
+
+		public RequestsToNotificationService() { }
+
+		public RequestsToNotificationService(ILogger<RequestsToNotificationService> logger)
+		{
+			_logger = logger;
+		}
+
 		public async Task RequestToCreateNotification(Job job, TypeNotification type)
 		{
 			if (job.ExecutorId > 0)
@@ -20,15 +29,20 @@ namespace TaskService.Requests
 					var response = await httpClient.PostAsync(url, content);
 
 					if (response.IsSuccessStatusCode)
-						Console.WriteLine("Notification created");
+						_logger.LogInformation($"sending notification success, job id: {notificationData.JobId}, " +
+							$"user id: {notificationData.UserId}, type: {notificationData.Type} " +
+							$"response {response.Content}");
 
 					else
-						Console.WriteLine("Notification creation failed");
+						_logger.LogError($"sending notification failed, job id: {notificationData.JobId}, " +
+							$"user id: {notificationData.UserId}, type: {notificationData.Type}, " +
+							$"response content {response.Content}");
 				}
 			}
 
 			else
-				Console.WriteLine("Notification creation failed");
+				_logger.LogError($"sending notification failed, job id: {job.Id}, " +
+					$"user id: {job.ExecutorId}, type: {type}");
 		}
 	}
 }

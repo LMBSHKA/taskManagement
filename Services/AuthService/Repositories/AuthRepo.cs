@@ -48,14 +48,16 @@ namespace AuthService.Repositories
 
 				var refreshToken = CreateRefreshToken(newUser).Result;
 
-				_logger.LogInformation($"Registration user, login: {registrationData.Email}");
+				_logger.LogInformation($"Registration user, login: {registrationData.Email} " +
+					$"name: {registrationData.Name}, surname: {registrationData.Surname}");
 
 				return [token, refreshToken];
 			}
 
 			catch
 			{
-				_logger.LogWarning($"Registration failed, login: {registrationData.Email}");
+				_logger.LogWarning($"Registration failed, login: {registrationData.Email} " +
+					$"name: {registrationData.Name}, surname: {registrationData.Surname}");
 				return null!;
 			}
 		}
@@ -155,8 +157,6 @@ namespace AuthService.Repositories
 			var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == refreshData.UserId);
 			if (user == null)
 			{
-				_logger.LogInformation($"Refresh token without user: {refreshToken}");
-
 				return null!;
 			}
 

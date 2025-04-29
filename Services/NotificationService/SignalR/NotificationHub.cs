@@ -28,11 +28,14 @@ namespace NotificationService.SignalR
 			var userId = notificationData.UserId;
 			if (userId <= 0)
 			{
-				_logger.LogError($"Notification not send, user id: {notificationData.UserId}");
+				_logger.LogError($"Notification not send, user id: {notificationData.UserId}, " +
+					$"message: {notificationData.Message}");
+
 				throw new HubException("Notification not send: invalid user id");
 			}
 
-			_logger.LogInformation($"Notification send, user id: {notificationData.UserId}");
+			_logger.LogInformation($"Notification send, user id: {notificationData.UserId}" +
+				$"message: {notificationData.Message}");
 
 			await Clients.Group(userId.ToString()).SendAsync("Notification", $"{notificationData.Message}");
 		}

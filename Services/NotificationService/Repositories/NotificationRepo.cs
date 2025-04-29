@@ -34,7 +34,8 @@ namespace NotificationService.Repositories
 
 			catch
 			{
-				_logger.LogWarning($"Notifiacation not created, user id: {notification.UserId}, job id: {notification.JobId}");
+				_logger.LogWarning($"Notifiacation not created, user id: {notification.UserId}, " +
+					$"job id: {notification.JobId}, type: {notification.Type}");
 				return false;
 			}
 		}

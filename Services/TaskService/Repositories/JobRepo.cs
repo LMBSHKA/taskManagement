@@ -10,12 +10,15 @@ namespace TaskService.Repositories
 	{
 		private readonly AppDbContext _context;
 		private readonly IRequestsToNotificationService _requestsToNotificationService;
+		private readonly ILogger<JobRepo> _logger;
 		private int _pageSize { get; } = 20;
 
-		public JobRepo(AppDbContext context, IRequestsToNotificationService requestsToNotificationService)
+		public JobRepo(AppDbContext context, IRequestsToNotificationService requestsToNotificationService, 
+			ILogger<JobRepo> logger)
 		{
 			_requestsToNotificationService = requestsToNotificationService;
 			_context = context;
+			_logger = logger;
 		}
 
 		public async Task<List<Job>> GetAllJobs(JobFilterDTO jobFilter, int pageNumber)
@@ -27,18 +30,33 @@ namespace TaskService.Repositories
 
 		private IQueryable<Job> SetFilterAndPagination(int pageNumber, JobFilterDTO jobFilter)
 		{
-			var jobs = _context.Jobs
-				.Where(job => 
-				job.IsDelete == false && 
-				EF.Functions.Like(job.Name!, $"%{jobFilter.Name}%") &
-				EF.Functions.Like(job.ExecutorName!, $"%{jobFilter.ExecutorName}%") &
-				EF.Functions.Like(job.ExecutorSurname!, $"%{jobFilter.ExecutorSurname}%") &
-				EF.Functions.Like(job.Description!, $"%{jobFilter.Description}%")
-			);
-			var startIndex = (pageNumber - 1) * _pageSize;
-			var pagedItems = jobs.Skip(startIndex).Take(_pageSize);
+			try
+			{
+				var jobs = _context.Jobs
+					.Where(job =>
+					job.IsDelete == false &&
+					EF.Functions.Like(job.Name!, $"%{jobFilter.Name}%") &
+					EF.Functions.Like(job.ExecutorName!, $"%{jobFilter.ExecutorName}%") &
+					EF.Functions.Like(job.ExecutorSurname!, $"%{jobFilter.ExecutorSurname}%") &
+					EF.Functions.Like(job.Description!, $"%{jobFilter.Description}%")
+				);
+				var startIndex = (pageNumber - 1) * _pageSize;
+				var pagedItems = jobs.Skip(startIndex).Take(_pageSize);
 
-			return pagedItems;
+				_logger.LogInformation($"set filters success, Name: {jobFilter.Name}, " +
+					$"Executor{jobFilter.ExecutorName} {jobFilter.ExecutorSurname}, " +
+					$"description {jobFilter.Description}");
+
+				return pagedItems;
+			}
+
+			catch
+			{
+				_logger.LogError($"set filters failed, Name: {jobFilter.Name}, " +
+					$"Executor{jobFilter.ExecutorName} {jobFilter.ExecutorSurname}, " +
+					$"description {jobFilter.Description}");
+				throw new Exception();
+			}
 		}
 
 		public async Task<Job?> GetJobById(int id)
@@ -54,11 +72,19 @@ namespace TaskService.Repositories
 				await _context.Jobs.AddAsync(job);
 				await _context.SaveChangesAsync();
 
+				_logger.LogInformation($"Created job, job name: {job.Name}, deadline: {job.DeadLine}" +
+					$"status: {job.Status}, Priority: {job.Priority}, " +
+					$"executor: {job.ExecutorName} {job.ExecutorSurname}");
+
 				return true;
 			}
 
 			catch
 			{
+				_logger.LogError($"Created job, job name: {job.Name}, deadline: {job.DeadLine}" +
+					$"status: {job.Status}, Priority: {job.Priority}, " +
+					$"executor: {job.ExecutorName} {job.ExecutorSurname}");
+
 				return false;
 			}
 		}
