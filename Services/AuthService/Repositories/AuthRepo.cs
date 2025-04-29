@@ -46,7 +46,7 @@ namespace AuthService.Repositories
 				var token = _jwtHandler.GenerateJwtToken(newUser);
 				await _context.SaveChangesAsync();
 
-				var refreshToken = CreateRefreshToken(newUser).Result;
+				var refreshToken = await CreateRefreshToken(newUser);
 
 				_logger.LogInformation($"Registration user, login: {registrationData.Email} " +
 					$"name: {registrationData.Name}, surname: {registrationData.Surname}");
@@ -83,6 +83,11 @@ namespace AuthService.Repositories
 				return refreshToken;
 			}
 
+			return await UpdateRefreshToken(refreshTokenData, expiry);
+		}
+
+		private async Task<string> UpdateRefreshToken(RefreshToken refreshTokenData, DateTime expiry)
+		{
 			var newRefreshToken = _jwtHandler.GetRefreshToken();
 			refreshTokenData.Expiry = expiry.ToString("dd.MM.yyyy");
 			refreshTokenData.Token = newRefreshToken;
