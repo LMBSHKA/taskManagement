@@ -13,9 +13,11 @@ namespace AuthService.Repositories
 		private readonly IPasswordHandler _passwordHandler;
 		private readonly IJWTHandler _jwtHandler;
 		private readonly IConfiguration _configuration;
+		private readonly ILogger<AuthRepo> _logger;
 		public AuthRepo(AppDbContext context, IPasswordHandler passwordHandler, IJWTHandler jwtHandler, 
-			IConfiguration config)
+			IConfiguration config, ILogger<AuthRepo> logger)
 		{
+			_logger = logger;
 			_passwordHandler = passwordHandler;
 			_context = context;
 			_jwtHandler = jwtHandler;
@@ -46,11 +48,14 @@ namespace AuthService.Repositories
 
 				var refreshToken = CreateRefreshToken(newUser).Result;
 
+				_logger.LogInformation($"Registration user, login: {registrationData.Email}");
+
 				return [token, refreshToken];
 			}
 
 			catch
 			{
+				_logger.LogWarning($"Registration failed, login: {registrationData.Email}");
 				return null!;
 			}
 		}
@@ -96,7 +101,10 @@ namespace AuthService.Repositories
 				return null!;
 
 			if (!_passwordHandler.VerifyPassword(user, loginData.Password))
+			{
+				_logger.LogInformation($"incorrect password, user login: {user.Email}");
 				return null!;
+			}
 
 			var token = _jwtHandler.GenerateJwtToken(user);
 			var refreshToken = await CreateRefreshToken(user);
@@ -112,7 +120,10 @@ namespace AuthService.Repositories
 
 			var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
 			if (user == null)
+			{
+				_logger.LogInformation($"access token with non-existent id: {userId},\ntoken: {accessToken}");
 				return null!;
+			}
 
 			return new UserInfoDTO(user.Name, user.Surname, user.Email);
 		}
@@ -142,8 +153,12 @@ namespace AuthService.Repositories
 				return null!;
 
 			var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == refreshData.UserId);
-			if (user == null) 
+			if (user == null)
+			{
+				_logger.LogInformation($"Refresh token without user: {refreshToken}");
+
 				return null!;
+			}
 
 			var accessToken = _jwtHandler.GenerateJwtToken(user);
 

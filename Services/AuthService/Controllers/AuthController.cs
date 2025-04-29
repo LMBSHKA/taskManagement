@@ -9,11 +9,13 @@ namespace AuthService.Controllers
 	[Route("api/auth/")]
 	public class AuthController : ControllerBase
 	{
+		private readonly ILogger<AuthController> _logger;
 		private readonly IAuthRepo _authRepo;
 
-		public AuthController(IAuthRepo authRepo)
+		public AuthController(IAuthRepo authRepo, ILogger<AuthController> logger)
 		{
 			_authRepo = authRepo;
+			_logger = logger;
 		}
 
 		[HttpPost("register")]
@@ -21,7 +23,9 @@ namespace AuthService.Controllers
 		{
 			var tokenList = await _authRepo.Registration(registrationData);
 			if (tokenList == null)
+			{
 				return BadRequest("Registration failed");
+			}
 
 			var accessToken = tokenList[0];
 			var refreshToken = tokenList[1];
@@ -37,11 +41,15 @@ namespace AuthService.Controllers
 
 			var tokenList = await _authRepo.Login(loginData);
 			if (tokenList == null)
+			{
+				_logger.LogInformation($"{loginData.Email} - login attempt");
 				return BadRequest("Invalid login data");
+			}
 
 			var accessToken = tokenList[0];
 			var refreshToken = tokenList[1];
 
+			_logger.LogInformation($"{loginData.Email} - login to account");
 			return Ok(new { accessToken, refreshToken });
 		}
 
@@ -54,7 +62,9 @@ namespace AuthService.Controllers
 
 			var user = await _authRepo.GetUserInfo(accessToken!);
 			if (user == null)
+			{
 				return BadRequest("User not found");
+			}
 
 			return Ok(user);
 		}
