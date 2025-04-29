@@ -1,5 +1,4 @@
-﻿using TaskService.Models;
-
+﻿
 namespace TaskService.DTOs
 {
 	public class JobFilterDTO

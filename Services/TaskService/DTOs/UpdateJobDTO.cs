@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using TaskService.Models;
+﻿using TaskService.Models;
 
 namespace TaskService.DTOs
 {

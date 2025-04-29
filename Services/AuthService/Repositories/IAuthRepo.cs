@@ -1,6 +1,4 @@
 ﻿using AuthService.DTOs;
-using AuthService.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Repositories
 {

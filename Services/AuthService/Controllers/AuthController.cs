@@ -1,11 +1,7 @@
 ﻿using AuthService.DTOs;
 using AuthService.Repositories;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace AuthService.Controllers
 {

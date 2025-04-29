@@ -64,8 +64,6 @@ internal class Program
 
 		app.UseAuthentication();
 
-		PrepDb.PrepPopulation(app);
-
 		app.UseAuthorization();
 
 		app.MapControllers();

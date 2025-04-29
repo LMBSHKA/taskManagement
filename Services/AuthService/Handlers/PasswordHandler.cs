@@ -1,6 +1,5 @@
 ﻿using AuthService.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Cryptography;
 
 namespace AuthService.Handlers
 {

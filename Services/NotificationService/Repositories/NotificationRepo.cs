@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NotificationService.Database;
 using NotificationService.DTO;
 using NotificationService.Models;
-using NotificationService.SignalR;
-using System.Security.Claims;
 
 namespace NotificationService.Repositories
 {

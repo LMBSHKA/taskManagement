@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using TaskService.Database;
+﻿using Microsoft.AspNetCore.Mvc;
 using TaskService.DTOs;
 using TaskService.Models;
 using TaskService.Repositories;

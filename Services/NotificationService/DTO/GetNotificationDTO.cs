@@ -1,5 +1,4 @@
 ﻿using NotificationService.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace NotificationService.DTO
 {

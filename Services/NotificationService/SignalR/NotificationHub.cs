@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using NotificationService.DTO;
-using NotificationService.Models;
-using System.Security.Claims;
 
 namespace NotificationService.SignalR
 {
