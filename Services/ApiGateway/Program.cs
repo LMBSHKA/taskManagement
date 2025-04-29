@@ -4,6 +4,7 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Provider.Polly;
 using System.Text;
+using Ocelot.Cache.CacheManager;
 
 internal class Program
 {
@@ -41,6 +42,7 @@ internal class Program
 			.AddOcelot();
 		builder.Services
 			.AddOcelot(builder.Configuration)
+			.AddCacheManager(x => x.WithDictionaryHandle())
 			.AddPolly();
 
 		builder.Services.AddControllers();

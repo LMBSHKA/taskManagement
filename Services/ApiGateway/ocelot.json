@@ -14,6 +14,12 @@
 
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
+      },
+
+      "FileCacheOptions": {
+        "TtlSeconds": 800,
+        "Region": "notification-cache",
+        "EnableContentHashing": false
       }
     },
 
@@ -74,8 +80,15 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       },
+
       "AddHeadersToRequest": {
         "X-User-Id": "Claims[sub]"
+      },
+
+      "FileCacheOptions": {
+        "TtlSeconds": 3600,
+        "Region": "user-cache",
+        "EnableContentHashing": false
       }
     },
 
@@ -103,8 +116,15 @@
       ],
       "UpstreamPathTemplate": "/api/tasks",
       "UpstreamHttpMethod": [ "GET", "POST" ],
+
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
+      },
+
+      "FileCacheOptions": {
+        "TtlSeconds": 800,
+        "Region": "task-cache",
+        "EnableContentHashing": true
       }
     },
 
@@ -119,8 +139,15 @@
       ],
       "UpstreamPathTemplate": "/api/tasks/{id}",
       "UpstreamHttpMethod": [ "GET" ],
+
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
+      },
+
+      "FileCacheOptions": {
+        "TtlSeconds": 800,
+        "Region": "task-cache",
+        "EnableContentHashing": false
       }
     },
 
@@ -135,6 +162,7 @@
       ],
       "UpstreamPathTemplate": "/api/tasks/{id}",
       "UpstreamHttpMethod": [ "PUT", "DELETE" ],
+
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
@@ -156,6 +184,7 @@
       }
     }
   ],
+
   "GlobalConfiguration": {
     "QoSOptions": {
       "ExceptionsAllowedBeforeBreaking": 3,
