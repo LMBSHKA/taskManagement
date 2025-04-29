@@ -7,10 +7,12 @@ namespace NotificationService.Repositories
 {
 	public class NotificationRepo : INotificationRepo
 	{
+		private readonly ILogger<NotificationRepo> _logger;
 		private readonly AppDbContext _context;
 
-		public NotificationRepo(AppDbContext context)
+		public NotificationRepo(AppDbContext context, ILogger<NotificationRepo> logger)
 		{ 
+			_logger = logger;
 			_context = context;
 		}
 
@@ -32,18 +34,28 @@ namespace NotificationService.Repositories
 
 			catch
 			{
+				_logger.LogWarning($"Notifiacation not created, user id: {notification.UserId}, job id: {notification.JobId}");
 				return false;
 			}
 		}
 
 		public async Task<List<GetNotificationDTO>> GetNotificationListByUserId(int userId)
 		{
-			var listNotification = await _context.Notifications
-				.Where(x => x.UserId == userId)
-				.Select(x => new GetNotificationDTO(x.JobId, x.UserId, x.Type, x.IsRead))
-				.ToListAsync();
+			try
+			{
+				var listNotification = await _context.Notifications
+					.Where(x => x.UserId == userId)
+					.Select(x => new GetNotificationDTO(x.JobId, x.UserId, x.Type, x.IsRead))
+					.ToListAsync();
 
-			return listNotification;
+				return listNotification;
+			}
+
+			catch 
+			{
+				_logger.LogWarning($"Can't get notification, user id: {userId}");
+				return null!;
+			}
 		}
 
 		public async Task<bool> MarkAsRead(int id)
@@ -63,6 +75,7 @@ namespace NotificationService.Repositories
 
 			catch
 			{
+				_logger.LogWarning($"Notifcation {id}, not reading");
 				return false;
 			}
 		}

@@ -5,6 +5,13 @@ namespace NotificationService.SignalR
 {
 	public class NotificationHub : Hub
 	{
+		private readonly ILogger<NotificationHub> _logger;
+		public NotificationHub() { }
+
+		public NotificationHub(ILogger<NotificationHub> logger)
+		{
+			_logger = logger;
+		}
 		public override async Task OnConnectedAsync()
 		{
 			var httpContext = Context.GetHttpContext();
@@ -20,7 +27,12 @@ namespace NotificationService.SignalR
 		{
 			var userId = notificationData.UserId;
 			if (userId <= 0)
+			{
+				_logger.LogError($"Notification not send, user id: {notificationData.UserId}");
 				throw new HubException("Notification not send: invalid user id");
+			}
+
+			_logger.LogInformation($"Notification send, user id: {notificationData.UserId}");
 
 			await Clients.Group(userId.ToString()).SendAsync("Notification", $"{notificationData.Message}");
 		}
