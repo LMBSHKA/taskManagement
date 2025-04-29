@@ -6,6 +6,7 @@ namespace TaskService.DTOs
 	{
 		[Required]
 		public string? ExecutorName { get; set; }
+		[Required]
 		public string? ExecutorSurname { get; set; }
 		[Required]
 		public int ExecutorId { get; set; }

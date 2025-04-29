@@ -80,6 +80,9 @@ namespace TaskService.Controllers
 			if (executor == null)
 				return BadRequest("Executor's data invalid");
 
+			if (executor.ExecutorId <= 0)
+				return BadRequest("Executor id invalid");
+
 			if (await _jobRepo.AsignExecutor(id, executor))
 				return Ok();
 
