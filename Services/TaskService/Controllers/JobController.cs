@@ -58,7 +58,7 @@ namespace TaskService.Controllers
 				return BadRequest("Update data invalid");
 
 			if (await _jobRepo.UpdateJob(id, updateData))
-				return Ok();
+				return Ok("Job is updated");
 
 			return BadRequest("Update failed");
 		}
@@ -67,7 +67,7 @@ namespace TaskService.Controllers
 		public async Task<IActionResult> DeleteJob(int id)
 		{
 			if (await _jobRepo.DeleteJob(id))
-				return Ok();
+				return Ok("Job is deleted");
 
 			return BadRequest("deletion failed");
 		}
@@ -82,7 +82,7 @@ namespace TaskService.Controllers
 				return BadRequest("Executor id invalid");
 
 			if (await _jobRepo.AsignExecutor(id, executor))
-				return Ok();
+				return Ok("Executor is appointed");
 
 			return BadRequest("The set is failed");
 		}

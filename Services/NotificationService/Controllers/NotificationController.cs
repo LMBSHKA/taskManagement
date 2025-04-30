@@ -41,7 +41,7 @@ namespace NotificationService.Controllers
 				return BadRequest("Invalid id");
 
 			if (await _notificationRepo.MarkAsRead(id))
-				return Ok();
+				return Ok("Notification read");
 
 			return BadRequest("Reading failed");
 		}
